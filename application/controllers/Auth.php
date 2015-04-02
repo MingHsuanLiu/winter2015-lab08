@@ -16,18 +16,12 @@ class Auth extends Application {
     // change the submit to login to match the login view page
     function login() {
         $key = $_POST['userid'];
-        echo $_POST['userid'];
-        echo '<br>';
-        echo $_POST['password'];
-        echo '<br>';
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        echo $password;
         $user = $this->users->get($key);
         if ($password == (string) $user->password) {
             $this->session->set_userdata('userID', $key);
             $this->session->set_userdata('userName', $user->name);
             $this->session->set_userdata('userRole', $user->role);
-            echo 'logged in';
         }
         redirect('/');
     }
