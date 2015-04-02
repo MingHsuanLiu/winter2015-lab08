@@ -31,15 +31,31 @@ class Application extends CI_Controller {
      * Render this page
      */
     function render() {
-        $this->data['menubar'] = $this->parser->parse('_menubar', $this->config->item('menu_choices'),true);
+        $this->data['menubar'] = $this->parser->parse('_menubar', $this->config->item('menu_choices'), true);
         $this->data['content'] = $this->parser->parse($this->data['pagebody'], $this->data, true);
 
         // finally, build the browser page!
         $this->data['data'] = &$this->data;
-        
+
         // verify the sessions are working by pasing in the view parameter
         $this->data['sessionid'] = session_id();
         $this->parser->parse('_template', $this->data);
+    }
+
+    // add restrict method for programmatically access control
+    function restrict($roleNeeded = null) {
+        $userRole = $this->session->userdata('userRole');
+        if ($roleNeeded != null) {
+            if (is_array($roleNeeded)) {
+                if (!in_array($userRole, $roleNeeded)) {
+                    redirect("/");
+                    return;
+                }
+            } else if ($userRole != $roleNeeded) {
+                redirect("/");
+                return;
+            }
+        }
     }
 
 }
