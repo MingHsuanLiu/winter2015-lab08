@@ -36,6 +36,9 @@ class Application extends CI_Controller {
 
         // finally, build the browser page!
         $this->data['data'] = &$this->data;
+        
+        // verify the sessions are working by pasing in the view parameter
+        $this->data['sessionid'] = session_id();
         $this->parser->parse('_template', $this->data);
     }
 
