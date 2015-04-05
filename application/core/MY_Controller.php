@@ -31,7 +31,8 @@ class Application extends CI_Controller {
      * Render this page
      */
     function render() {
-        $this->data['menubar'] = $this->parser->parse('_menubar', $this->config->item('menu_choices'), true);
+        // $this->data['menubar'] = $this->parser->parse('_menubar', $this->config->item('menu_choices'), true);
+        $this->data['menubar'] = $this->makemenu();
         $this->data['content'] = $this->parser->parse($this->data['pagebody'], $this->data, true);
 
         // finally, build the browser page!
@@ -58,7 +59,44 @@ class Application extends CI_Controller {
         }
     }
 
+    function makemenu() {
+        //get role & name from session
+        $userRole = $this->session->userdata('userRole');
+        $userName = $this->session->userdata('userName');
+
+        // make array, with menu choice for alpha
+        $menudata = array(
+            array('name' => "Alpha", 'link' => '/alpha'),
+        );
+
+        // if not logged in, add menu choice to login
+        if ($userName == NULL) {
+            $menudata = array(
+                array('name' => "Alpha", 'link' => '/alpha'),
+                array('name' => "Login", 'link' => '/auth'),
+            );
+        } else if ($userRole == 'user') {   // if user, add menu choice for beta and logout
+            $menudata = array(
+                array('name' => "Alpha", 'link' => '/alpha'),
+                array('name' => "Beta", 'link' => '/beta'),
+                array('name' => "Login", 'link' => '/auth'),
+                array('name' => "Logout", 'link' => '/auth/logout'),
+            );
+        } else if ($userRose == 'admin') {  // if admin, add menu choices for beta, gamma and logout
+            $menudata = array(
+                array('name' => "Alpha", 'link' => '/alpha'),
+                array('name' => "Beta", 'link' => '/beta'),
+                array('name' => "Gamma", 'link' => '/gamma'),
+                array('name' => "Login", 'link' => '/auth'),
+                array('name' => "Logout", 'link' => '/auth/logout'),
+            );
+        }
+
+        return $menudata;
+        // return the choices array
+    }
+
 }
 
 /* End of file MY_Controller.php */
-/* Location: application/core/MY_Controller.php */
+    /* Location: application/core/MY_Controller.php */    
