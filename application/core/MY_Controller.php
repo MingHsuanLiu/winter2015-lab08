@@ -31,8 +31,8 @@ class Application extends CI_Controller {
      * Render this page
      */
     function render() {
-        // $this->data['menubar'] = $this->parser->parse('_menubar', $this->config->item('menu_choices'), true);
-        $this->data['menubar'] = $this->makemenu();
+        $menudata = array('menudata' => $this->makemenu());
+        $this->data['menubar'] = $this->parser->parse('_menubar', $menudata, true);
         $this->data['content'] = $this->parser->parse($this->data['pagebody'], $this->data, true);
 
         // finally, build the browser page!
@@ -75,19 +75,17 @@ class Application extends CI_Controller {
                 array('name' => "Alpha", 'link' => '/alpha'),
                 array('name' => "Login", 'link' => '/auth'),
             );
-        } else if ($userRole == 'user') {   // if user, add menu choice for beta and logout
+        } else if ($userRole == "user") {   // if user, add menu choice for beta and logout
             $menudata = array(
                 array('name' => "Alpha", 'link' => '/alpha'),
                 array('name' => "Beta", 'link' => '/beta'),
-                array('name' => "Login", 'link' => '/auth'),
                 array('name' => "Logout", 'link' => '/auth/logout'),
             );
-        } else if ($userRose == 'admin') {  // if admin, add menu choices for beta, gamma and logout
+        } else if ($userRole == "admin") {  // if admin, add menu choices for beta, gamma and logout
             $menudata = array(
                 array('name' => "Alpha", 'link' => '/alpha'),
                 array('name' => "Beta", 'link' => '/beta'),
                 array('name' => "Gamma", 'link' => '/gamma'),
-                array('name' => "Login", 'link' => '/auth'),
                 array('name' => "Logout", 'link' => '/auth/logout'),
             );
         }
